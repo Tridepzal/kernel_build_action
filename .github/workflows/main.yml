@@ -1,53 +1,45 @@
-name: CI
+name: Build Kernel Poco X3 Pro
 on:
   push:
-    branches: main
-    paths:
-      - '.github/workflows/main.yml'
-      - 'action.yml'
-      - 'src/**/*.ts'
-      - 'package.json'
-      - 'yarn.lock'
-
+    branches:
+      - main
   pull_request:
-    paths:
-      - '.github/workflows/main.yml'
-      - 'action.yml'
-      - 'src/**/*.ts'
-      - 'package.json'
-      - 'yarn.lock'
-
   workflow_dispatch:
 
 jobs:
-  ci-test:
+  build:
     name: Build Kernel
-    strategy:
-      fail-fast: false
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v6
-      with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Build Kernel
-      uses: ./
-      with:
-          kernel-url: https://github.com/AcmeUI-Devices/android_kernel_xiaomi_cas
-          kernel-dir: msm-4.19
-          kernel-branch: taffy
-          config: cas_defconfig
+      - name: Build Kernel
+        uses: ./
+        with:
+          kernel-url: https://github.com/tejas101k/kernel_xiaomi_vayu
+          kernel-dir: msm-4.14
+          kernel-branch: 14
+          config: vayu_user_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
           ksu: true
           ksu-version: main
-          android-version: 12
+          extra-cmd: |
+            curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s main
+            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android-4.14
+            cp susfs4ksu/kernel_patches/50_add_susfs_in_kernel-4.14.patch .
+            cp susfs4ksu/kernel_patches/fs/susfs.c fs/
+            cp susfs4ksu/kernel_patches/include/linux/susfs.h include/linux/
+            patch -p1 < 50_add_susfs_in_kernel-4.14.patch
+            echo "CONFIG_SUSFS=y" >> arch/arm64/configs/vayu_user_defconfig
+            echo "CONFIG_KSU_NEXT=y" >> arch/arm64/configs/vayu_user_defconfig
+          android-version: 15
           aosp-clang-version: r383902
           disable-lto: true
           anykernel3: true
+          
