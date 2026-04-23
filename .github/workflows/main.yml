@@ -21,7 +21,7 @@ jobs:
         uses: ./
         with:
           kernel-url: https://github.com/tejas101k/kernel_xiaomi_vayu
-          kernel-dir: .
+          kernel-dir: kernel-source
           kernel-branch: sixteen
           config: vayu_user_defconfig
           arch: arm64
@@ -33,6 +33,8 @@ jobs:
           aosp-clang-version: r383902
           disable-lto: true
           anykernel3: true
+          extra-make-args: O=out
           extra-cmd: |
+            export O=out
             make clean
             make mrproper
