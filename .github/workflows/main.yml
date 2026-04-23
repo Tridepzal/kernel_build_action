@@ -38,7 +38,7 @@ jobs:
             patch -p1 < 50_add_susfs_in_kernel-4.14.patch
             echo "CONFIG_SUSFS=y" >> arch/arm64/configs/vayu_user_defconfig
             echo "CONFIG_KSU_NEXT=y" >> arch/arm64/configs/vayu_user_defconfig
-          android-version: 15
+          android-version: 12
           aosp-clang-version: r383902
           disable-lto: true
           anykernel3: true
