@@ -21,7 +21,8 @@ jobs:
         uses: ./
         with:
           kernel-url: https://github.com/tejas101k/kernel_xiaomi_vayu
-          kernel-dir: kernel-source
+          # Để mặc định để script tự xử lý đường dẫn
+          kernel-dir: kernel
           kernel-branch: sixteen
           config: vayu_user_defconfig
           arch: arm64
@@ -34,7 +35,3 @@ jobs:
           disable-lto: true
           anykernel3: true
           extra-make-args: O=out
-          extra-cmd: |
-            cd kernel-source
-            make clean
-            make mrproper
