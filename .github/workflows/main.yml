@@ -30,6 +30,4 @@ jobs:
           ksu-version: main
           disable-lto: true
           anykernel3: true
-          # Lệnh quan trọng nhất để sửa lỗi Makefile:
           extra-make-args: O=out KBUILD_ABS_SRCTREE=1
-          
