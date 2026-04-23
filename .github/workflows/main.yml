@@ -35,6 +35,6 @@ jobs:
           anykernel3: true
           extra-make-args: O=out
           extra-cmd: |
-            export O=out
+            cd kernel-source
             make clean
             make mrproper
