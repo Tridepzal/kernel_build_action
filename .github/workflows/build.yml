@@ -1,29 +1,24 @@
-name: Build Kernel Poco X3 Pro
+# A simple action usage
+name: Build Kernel
 on:
-  push:
-    branches:
-      - main
-  pull_request:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build Kernel
+  Build-Kernel:
+    strategy:
+      fail-fast: false
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Build Kernel
-        uses: ./
+        uses: dabao1955/kernel_build_action@main
         with:
-          kernel-url: https://github.com/tejas101k/kernel_xiaomi_vayu
-          kernel-dir: .
-          kernel-branch: sixteen
-          config: vayu_user_defconfig
+          kernel-url: https://github.com/AcmeUI-Devices/android_kernel_xiaomi_cas
+          kernel-dir: msm-4.19
+          kernel-branch: taffy
+          config: cas_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
